@@ -64,9 +64,19 @@ const Rose = ({ stage, isDead, isGrowing }: RoseProps) => {
           {/* Magical particles effect for blooming */}
           {stage === 4 && !isDead && (
             <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute top-4 left-4 w-2 h-2 bg-golden rounded-full animate-float opacity-70"></div>
-              <div className="absolute top-8 right-6 w-1 h-1 bg-golden-light rounded-full animate-pulse-soft"></div>
-              <div className="absolute bottom-6 left-8 w-1.5 h-1.5 bg-rose rounded-full animate-float" style={{ animationDelay: '1s' }}></div>
+              <div className="absolute top-4 left-4 w-3 h-3 bg-golden rounded-full animate-sparkle opacity-80"></div>
+              <div className="absolute top-8 right-6 w-2 h-2 bg-golden-light rounded-full animate-pulse-soft"></div>
+              <div className="absolute bottom-6 left-8 w-2 h-2 bg-rose rounded-full animate-float" style={{ animationDelay: '1s' }}></div>
+              <div className="absolute top-12 left-1/2 w-1 h-1 bg-garden-light rounded-full animate-sparkle" style={{ animationDelay: '0.5s' }}></div>
+              <div className="absolute bottom-12 right-12 w-2 h-2 bg-rose-light rounded-full animate-pulse-soft" style={{ animationDelay: '1.5s' }}></div>
+            </div>
+          )}
+          
+          {/* Growth sparkles for growing stages */}
+          {(isGrowing || stage > 0) && !isDead && (
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-garden rounded-full animate-sparkle opacity-60"></div>
+              <div className="absolute bottom-1/3 left-1/4 w-1 h-1 bg-golden rounded-full animate-pulse-soft opacity-70"></div>
             </div>
           )}
         </div>
@@ -101,11 +111,14 @@ const Rose = ({ stage, isDead, isGrowing }: RoseProps) => {
 
       {/* Stage Message */}
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-foreground mb-2 animate-pulse-soft">
+        <h2 className="text-2xl font-bold text-foreground mb-2 animate-pulse-soft font-arabic">
           {getStageMessage()}
         </h2>
-        <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
+        <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground font-arabic">
           <span>المرحلة {stage + 1} من 5</span>
+          {stage === 4 && !isDead && (
+            <span className="text-golden animate-sparkle">✨</span>
+          )}
         </div>
       </div>
     </div>

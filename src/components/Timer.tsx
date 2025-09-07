@@ -81,35 +81,40 @@ const Timer = ({ onTick, onComplete, onAbandoned }: TimerProps) => {
       <div className="flex flex-col items-center space-y-6">
         {/* Timer Display */}
         <div className="relative">
-          <div className="text-6xl font-bold text-foreground font-mono tracking-wider">
+          <div className="text-6xl font-bold text-foreground font-mono tracking-wider text-center">
             {formatTime(minutes, seconds)}
           </div>
           
           {/* Progress Bar */}
-          <div className="mt-4 w-64 h-2 bg-muted rounded-full overflow-hidden">
+          <div className="mt-4 w-64 h-3 bg-muted rounded-full overflow-hidden shadow-inner">
             <div 
-              className="h-full bg-gradient-rose transition-all duration-1000 ease-out"
+              className="h-full bg-gradient-rose transition-all duration-1000 ease-out rounded-full shadow-glow"
               style={{ width: `${getProgressPercentage()}%` }}
             />
+          </div>
+          
+          {/* Progress percentage */}
+          <div className="mt-2 text-center text-sm text-muted-foreground font-arabic">
+            {Math.round(getProgressPercentage())}% مكتمل
           </div>
         </div>
 
         {/* Controls */}
         <div className="flex items-center space-x-4">
           {!isRunning ? (
-            <Button
-              onClick={startTimer}
-              disabled={minutes === 0 && seconds === 0}
-              className="bg-gradient-rose hover:bg-gradient-sunset text-white px-8 py-3 rounded-xl shadow-rose"
-            >
-              <Play className="w-5 h-5 mr-2" />
-              ابدأ التركيز
-            </Button>
+              <Button
+                onClick={startTimer}
+                disabled={minutes === 0 && seconds === 0}
+                className="bg-gradient-rose hover:bg-gradient-sunset text-white px-8 py-3 rounded-xl shadow-rose transition-all duration-300 hover:scale-105 font-arabic"
+              >
+                <Play className="w-5 h-5 mr-2" />
+                ابدأ التركيز
+              </Button>
           ) : (
             <Button
               onClick={pauseTimer}
               variant="outline"
-              className="border-rose text-rose hover:bg-rose hover:text-white px-8 py-3 rounded-xl"
+              className="border-rose text-rose hover:bg-rose hover:text-white px-8 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-arabic"
             >
               <Pause className="w-5 h-5 mr-2" />
               توقف
@@ -119,7 +124,7 @@ const Timer = ({ onTick, onComplete, onAbandoned }: TimerProps) => {
           <Button
             onClick={stopTimer}
             variant="outline"
-            className="border-destructive text-destructive hover:bg-destructive hover:text-white px-6 py-3 rounded-xl"
+            className="border-destructive text-destructive hover:bg-destructive hover:text-white px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-arabic"
           >
             <Square className="w-4 h-4 mr-2" />
             إيقاف
@@ -168,11 +173,11 @@ const Timer = ({ onTick, onComplete, onAbandoned }: TimerProps) => {
 
         {/* Warning Message */}
         {isRunning && (
-          <div className="text-center text-sm text-muted-foreground bg-accent/20 p-4 rounded-lg">
-            <p className="font-medium text-accent-foreground">
+          <div className="text-center text-sm text-muted-foreground bg-accent/20 p-4 rounded-lg border border-accent/30 animate-pulse-soft">
+            <p className="font-medium text-accent-foreground font-arabic">
               🌸 لا تترك التطبيق وإلا ستذبل زهرتك الجميلة!
             </p>
-            <p className="text-xs mt-1">
+            <p className="text-xs mt-1 font-arabic">
               ابق مركزاً واتركها تنمو بألوان زاهية
             </p>
           </div>
