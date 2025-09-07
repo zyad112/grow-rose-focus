@@ -47,6 +47,23 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Focus app colors
+        rose: {
+          DEFAULT: "hsl(var(--rose-pink))",
+          light: "hsl(var(--rose-pink-light))",
+          dark: "hsl(var(--rose-pink-dark))",
+        },
+        garden: {
+          DEFAULT: "hsl(var(--garden-green))",
+          light: "hsl(var(--garden-green-light))",
+          dark: "hsl(var(--garden-green-dark))",
+        },
+        golden: {
+          DEFAULT: "hsl(var(--golden-yellow))",
+          light: "hsl(var(--golden-yellow-light))",
+        },
+        earth: "hsl(var(--earth-brown))",
+        sky: "hsl(var(--sky-blue))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -63,27 +80,56 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      backgroundImage: {
+        'gradient-rose': 'var(--gradient-rose)',
+        'gradient-garden': 'var(--gradient-garden)', 
+        'gradient-sunset': 'var(--gradient-sunset)',
+        'gradient-nature': 'var(--gradient-nature)',
+      },
+      boxShadow: {
+        'rose': 'var(--shadow-rose)',
+        'garden': 'var(--shadow-garden)',
+        'glow': 'var(--shadow-glow)',
+      },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "grow": {
+          "0%": { transform: "scale(0.8)", opacity: "0.5" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        "wither": {
+          "0%": { transform: "scale(1)", opacity: "1" },
+          "100%": { transform: "scale(0.6)", opacity: "0.3" },
+        },
+        "bloom": {
+          "0%": { transform: "scale(0.9) rotate(-5deg)", opacity: "0.8" },
+          "50%": { transform: "scale(1.1) rotate(2deg)", opacity: "1" },
+          "100%": { transform: "scale(1) rotate(0deg)", opacity: "1" },
+        },
+        "pulse-soft": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.7" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "grow": "grow 0.8s ease-out",
+        "wither": "wither 0.5s ease-in",
+        "bloom": "bloom 1.2s ease-out",
+        "pulse-soft": "pulse-soft 2s ease-in-out infinite",
+        "float": "float 3s ease-in-out infinite",
       },
     },
   },
