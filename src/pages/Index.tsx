@@ -15,7 +15,12 @@ const Index = () => {
   const [rosesGrown, setRosesGrown] = useState(0);
   const { toast } = useToast();
 
-  // Load stats from localStorage
+  // Request notification permission on component mount
+  useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }, []);
   useEffect(() => {
     const savedStats = localStorage.getItem('focusRoseStats');
     if (savedStats) {
@@ -43,10 +48,10 @@ const Index = () => {
       // Show growth messages
       const messages = [
         'البذرة زُرعت! 🌱',
-        'البراعم تظهر! 🌿',
-        'الأوراق تنمو! 🍃',
-        'البرعم يتكون! 🌹',
-        'الوردة تتفتح! 🌹✨'
+        'البراعم الملونة تظهر! 🌿',
+        'الأوراق الزاهية تنمو! 🍃',
+        'البرعم الجميل يتكون! 🌺',
+        'الزهرة المتألقة تتفتح! 🌸✨'
       ];
       
       toast({
@@ -77,9 +82,17 @@ const Index = () => {
     
     toast({
       title: 'مبروك! 🎉',
-      description: 'وردتك مزهرة بالكامل! أحسنت',
+      description: 'زهرتك الجميلة مكتملة النمو! إنجاز رائع',
       duration: 4000,
     });
+    
+    // Browser notification
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('zd flower', {
+        body: 'مبروك! زهرتك الجميلة اكتمل نموها 🌸✨',
+        icon: '/favicon.ico'
+      });
+    }
     
     // Reset for next session after celebration
     setTimeout(() => {
@@ -95,7 +108,7 @@ const Index = () => {
     
     toast({
       title: 'أوه لا! 😢',
-      description: 'وردتك ذبلت... لا تيأس، ابدأ من جديد!',
+      description: 'زهرتك ذبلت... لا تيأس، ابدأ من جديد!',
       variant: 'destructive',
       duration: 3000,
     });
@@ -113,11 +126,11 @@ const Index = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4 bg-gradient-sunset bg-clip-text text-transparent">
-            🌹 Focus Rose
+            🌺 zd flower
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            ركز واتركد وردتك تنمو. كل دقيقة تركيز تساعد وردتك على النمو، 
-            ولكن إذا تركت التطبيق قبل انتهاء الوقت فستذبل وردتك!
+            ادرس أو اعمل واترك هاتفك لتنمو زهرتك الجميلة. كلما زاد وقت التركيز، 
+            تتطور زهرتك إلى ألوان أزهى وأشكال أجمل!
           </p>
         </div>
 
@@ -155,7 +168,7 @@ const Index = () => {
         {/* Footer */}
         <div className="text-center mt-12 text-sm text-muted-foreground">
           <p>
-            💡 نصيحة: ضع هاتفك بعيداً واتركد وردتك تنمو في هدوء
+            💡 نصيحة: ضع هاتفك بعيداً واترك زهورك تنمو في هدوء وجمال
           </p>
         </div>
       </div>

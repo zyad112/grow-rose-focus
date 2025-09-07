@@ -170,10 +170,10 @@ const Timer = ({ onTick, onComplete, onAbandoned }: TimerProps) => {
         {isRunning && (
           <div className="text-center text-sm text-muted-foreground bg-accent/20 p-4 rounded-lg">
             <p className="font-medium text-accent-foreground">
-              🌹 لا تترك التطبيق وإلا ستذبل وردتك!
+              🌸 لا تترك التطبيق وإلا ستذبل زهرتك الجميلة!
             </p>
             <p className="text-xs mt-1">
-              ابق مركزاً واتركها تنمو بجمال
+              ابق مركزاً واتركها تنمو بألوان زاهية
             </p>
           </div>
         )}

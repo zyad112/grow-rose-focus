@@ -27,14 +27,14 @@ const Rose = ({ stage, isDead, isGrowing }: RoseProps) => {
   }, [isGrowing, stage]);
 
   const getStageMessage = () => {
-    if (isDead) return "الوردة ذبلت... ابدأ من جديد 🥀";
+    if (isDead) return "الزهرة ذبلت... ابدأ من جديد 🥀";
     
     switch (stage) {
       case 0: return "ازرع بذرة التركيز 🌱";
-      case 1: return "البراعم تنمو! 🌿";
-      case 2: return "الأوراق تكبر 🍃";
-      case 3: return "البرعم يتفتح 🌹";
-      case 4: return "وردتك مزهرة! أحسنت 🌹✨";
+      case 1: return "البراعم الملونة تنمو! 🌿";
+      case 2: return "الأوراق الزاهية تكبر 🍃";
+      case 3: return "البرعم الجميل يتفتح 🌺";
+      case 4: return "زهرتك متألقة ومكتملة! رائع 🌸✨";
       default: return "ازرع بذرة التركيز";
     }
   };
@@ -57,7 +57,7 @@ const Rose = ({ stage, isDead, isGrowing }: RoseProps) => {
         `}>
           <img
             src={currentImage}
-            alt={`Rose stage ${stage}`}
+            alt={`Flower stage ${stage}`}
             className="w-full h-full object-cover transition-all duration-500"
           />
           
