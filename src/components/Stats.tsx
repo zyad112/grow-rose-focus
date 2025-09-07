@@ -44,7 +44,7 @@ const Stats = ({ completedSessions, totalFocusTime, longestStreak, rosesGrown }:
     },
     {
       icon: Flower,
-      label: 'الورود المزروعة',
+      label: 'الأزهار المزروعة',
       value: rosesGrown.toString(),
       color: 'text-rose-light',
       bgColor: 'bg-rose-light/10',
@@ -95,16 +95,16 @@ const Stats = ({ completedSessions, totalFocusTime, longestStreak, rosesGrown }:
         <div className="text-center p-4 bg-gradient-sunset/10 rounded-xl border border-golden/20">
           <div className="text-sm text-foreground">
             {completedSessions === 0 && (
-              <p>🌱 ابدأ أول جلسة تركيز وازرع أول وردة!</p>
+              <p>🌱 ابدأ أول جلسة تركيز وازرع أول زهرة!</p>
             )}
             {completedSessions > 0 && completedSessions < 5 && (
               <p>🌿 أحسنت! استمر في الزراعة</p>
             )}
             {completedSessions >= 5 && completedSessions < 10 && (
-              <p>🌹 رائع! حديقتك تنمو بجمال</p>
+              <p>🌺 رائع! حديقتك تنمو بجمال</p>
             )}
             {completedSessions >= 10 && (
-              <p>🌺 مبدع! أصبحت خبير زراعة الورود</p>
+              <p>🌸 مبدع! أصبحت خبير زراعة الأزهار</p>
             )}
           </div>
         </div>
@@ -113,8 +113,8 @@ const Stats = ({ completedSessions, totalFocusTime, longestStreak, rosesGrown }:
         {rosesGrown > 0 && (
           <div className="space-y-2">
             <div className="flex justify-between text-xs text-muted-foreground">
-              <span>حديقة الورود</span>
-              <span>{rosesGrown} وردة</span>
+              <span>حديقة الأزهار</span>
+              <span>{rosesGrown} زهرة</span>
             </div>
             <div className="flex space-x-1">
               {Array.from({ length: Math.min(rosesGrown, 10) }).map((_, i) => (

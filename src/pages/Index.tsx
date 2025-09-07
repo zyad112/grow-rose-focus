@@ -15,13 +15,12 @@ const Index = () => {
   const [rosesGrown, setRosesGrown] = useState(0);
   const { toast } = useToast();
 
-  // Request notification permission on component mount
+  // Request notification permission and load stats from localStorage
   useEffect(() => {
     if ('Notification' in window && Notification.permission === 'default') {
       Notification.requestPermission();
     }
-  }, []);
-  useEffect(() => {
+
     const savedStats = localStorage.getItem('focusRoseStats');
     if (savedStats) {
       const stats = JSON.parse(savedStats);
