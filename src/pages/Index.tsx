@@ -8,8 +8,11 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import VipAccess from '@/components/VipAccess';
 import DeveloperInfo from '@/components/DeveloperInfo';
+import VipRose from '@/components/VipRose';
+import VipStats from '@/components/VipStats';
 import { useToast } from '@/hooks/use-toast';
 import { playGrowthSound, playSuccessSound } from '@/utils/sounds';
+import { playVipGrowthSound, playVipSuccessSound, playVipNotification, playVipLevelUp } from '@/utils/vipSounds';
 
 const Index = () => {
   const [roseStage, setRoseStage] = useState(0);
@@ -19,6 +22,9 @@ const Index = () => {
   const [totalFocusTime, setTotalFocusTime] = useState(0);
   const [longestStreak, setLongestStreak] = useState(0);
   const [rosesGrown, setRosesGrown] = useState(0);
+  const [isVipActive, setIsVipActive] = useState(() => {
+    return localStorage.getItem('vipAccess') === 'true';
+  });
   const { toast } = useToast();
 
   // Request notification permission and load stats from localStorage
@@ -76,8 +82,17 @@ const Index = () => {
         duration: 2000,
       });
       
-      // Play growth sound
-      playGrowthSound();
+      // Play growth sound (VIP or regular)
+      if (isVipActive) {
+        playVipGrowthSound();
+        
+        // VIP level up notification for certain stages
+        if (newStage === 2 || newStage === 4) {
+          setTimeout(() => playVipLevelUp(), 500);
+        }
+      } else {
+        playGrowthSound();
+      }
     }
   };
 
@@ -105,13 +120,22 @@ const Index = () => {
       duration: 4000,
     });
     
-    // Play success sound
-    playSuccessSound();
+    // Play success sound (VIP or regular)
+    if (isVipActive) {
+      playVipSuccessSound();
+      setTimeout(() => playVipNotification(), 1000);
+    } else {
+      playSuccessSound();
+    }
     
-    // Browser notification
     if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification('zd flower', {
-        body: 'مبروك! زهرتك الجميلة اكتمل نموها 🌸✨',
+      const notificationTitle = isVipActive ? '👑 zd flower VIP' : 'zd flower';
+      const notificationBody = isVipActive 
+        ? 'مبروك! زهرتك الملكية اكتمل نموها بأبهى صورة 🌸✨👑'
+        : 'مبروك! زهرتك الجميلة اكتمل نموها 🌸✨';
+        
+      new Notification(notificationTitle, {
+        body: notificationBody,
         icon: '/favicon.ico'
       });
     }
@@ -168,12 +192,30 @@ const Index = () => {
         <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto px-4">
           {/* Rose Display - Main Focus */}
           <div className="lg:col-span-2">
-            <Card className="p-8 bg-card/80 backdrop-blur-sm border-border shadow-garden">
-              <Rose 
-                stage={roseStage} 
-                isDead={isDead} 
-                isGrowing={isGrowing}
-              />
+            <Card className="p-6 lg:p-8 bg-card/80 backdrop-blur-sm border-border shadow-garden relative overflow-hidden">
+              {/* VIP Enhancement Indicator */}
+              {isVipActive && (
+                <div className="absolute top-4 right-4 z-10">
+                  <div className="bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg animate-pulse flex items-center space-x-1">
+                    <span>👑</span>
+                    <span className="font-arabic">VIP</span>
+                  </div>
+                </div>
+              )}
+              
+              {isVipActive ? (
+                <VipRose 
+                  stage={roseStage} 
+                  isDead={isDead} 
+                  isGrowing={isGrowing}
+                />
+              ) : (
+                <Rose 
+                  stage={roseStage} 
+                  isDead={isDead} 
+                  isGrowing={isGrowing}
+                />
+              )}
             </Card>
           </div>
 
@@ -197,12 +239,21 @@ const Index = () => {
               </TabsList>
               
               <TabsContent value="stats">
-                <Stats
-                  completedSessions={completedSessions}
-                  totalFocusTime={totalFocusTime}
-                  longestStreak={longestStreak}
-                  rosesGrown={rosesGrown}
-                />
+                {isVipActive ? (
+                  <VipStats
+                    completedSessions={completedSessions}
+                    totalFocusTime={totalFocusTime}
+                    longestStreak={longestStreak}
+                    rosesGrown={rosesGrown}
+                  />
+                ) : (
+                  <Stats
+                    completedSessions={completedSessions}
+                    totalFocusTime={totalFocusTime}
+                    longestStreak={longestStreak}
+                    rosesGrown={rosesGrown}
+                  />
+                )}
               </TabsContent>
               
               <TabsContent value="challenges">
@@ -214,7 +265,12 @@ const Index = () => {
               </TabsContent>
               
               <TabsContent value="vip">
-                <VipAccess />
+                <VipAccess 
+                  onVipUnlock={() => {
+                    setIsVipActive(true);
+                    playVipLevelUp();
+                  }} 
+                />
               </TabsContent>
               
               <TabsContent value="developer">
