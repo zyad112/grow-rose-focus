@@ -6,6 +6,8 @@ import Challenges from '@/components/Challenges';
 import Settings from '@/components/Settings';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import VipAccess from '@/components/VipAccess';
+import DeveloperInfo from '@/components/DeveloperInfo';
 import { useToast } from '@/hooks/use-toast';
 import { playGrowthSound, playSuccessSound } from '@/utils/sounds';
 
@@ -144,17 +146,26 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-nature">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-foreground mb-4 bg-gradient-sunset bg-clip-text text-transparent font-arabic">
-            🌺 zd flower
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed font-arabic">
+        <div className="text-center mb-8 px-4">
+          {/* Decorative App Name */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 blur-2xl bg-gradient-sunset opacity-30 scale-110"></div>
+            <h1 className="relative text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 font-arabic">
+              <span className="inline-block bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 bg-clip-text text-transparent animate-pulse">
+                🌺 zd flower ✨
+              </span>
+            </h1>
+            <div className="absolute -top-2 -right-2 text-2xl animate-bounce">🌸</div>
+            <div className="absolute -bottom-1 -left-2 text-xl animate-pulse">🌿</div>
+          </div>
+          
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed font-arabic px-4">
             ادرس أو اعمل واترك هاتفك لتنمو زهرتك الجميلة. كلما زاد وقت التركيز، 
             تتطور زهرتك إلى ألوان أزهى وأشكال أجمل!
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto px-4">
           {/* Rose Display - Main Focus */}
           <div className="lg:col-span-2">
             <Card className="p-8 bg-card/80 backdrop-blur-sm border-border shadow-garden">
@@ -177,10 +188,12 @@ const Index = () => {
 
             {/* Tabs for additional features */}
             <Tabs defaultValue="stats" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 mb-4">
-                <TabsTrigger value="stats" className="text-xs font-arabic">📊 إحصائيات</TabsTrigger>
-                <TabsTrigger value="challenges" className="text-xs font-arabic">🏆 تحديات</TabsTrigger>
-                <TabsTrigger value="settings" className="text-xs font-arabic">⚙️ إعدادات</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-5 mb-4 text-xs">
+                <TabsTrigger value="stats" className="text-xs font-arabic px-1">📊</TabsTrigger>
+                <TabsTrigger value="challenges" className="text-xs font-arabic px-1">🏆</TabsTrigger>
+                <TabsTrigger value="vip" className="text-xs font-arabic px-1">👑</TabsTrigger>
+                <TabsTrigger value="developer" className="text-xs font-arabic px-1">👨‍💻</TabsTrigger>
+                <TabsTrigger value="settings" className="text-xs font-arabic px-1">⚙️</TabsTrigger>
               </TabsList>
               
               <TabsContent value="stats">
@@ -198,6 +211,14 @@ const Index = () => {
                   totalFocusTime={totalFocusTime}
                   rosesGrown={rosesGrown}
                 />
+              </TabsContent>
+              
+              <TabsContent value="vip">
+                <VipAccess />
+              </TabsContent>
+              
+              <TabsContent value="developer">
+                <DeveloperInfo />
               </TabsContent>
               
               <TabsContent value="settings">

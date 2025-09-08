@@ -55,18 +55,34 @@ All colors MUST be HSL.
     --earth-brown: 30 25% 35%;
     --sky-blue: 200 75% 85%;
 
+    /* VIP and Premium colors */
+    --vip-gold: 45 95% 55%;
+    --vip-gold-light: 45 85% 70%;
+    --vip-purple: 280 70% 65%;
+    
+    /* Security colors */
+    --secure-green: 120 60% 50%;
+    --warning-amber: 35 90% 60%;
+
     /* Gradients */
     --gradient-rose: linear-gradient(135deg, hsl(var(--rose-pink-light)), hsl(var(--rose-pink)));
     --gradient-garden: linear-gradient(135deg, hsl(var(--garden-green-light)), hsl(var(--garden-green)));
     --gradient-sunset: linear-gradient(135deg, hsl(var(--golden-yellow)), hsl(var(--rose-pink-light)));
     --gradient-nature: linear-gradient(180deg, hsl(var(--sky-blue)), hsl(var(--garden-green-light)));
+    --gradient-vip: linear-gradient(135deg, hsl(var(--vip-gold)), hsl(var(--vip-purple)));
+    --gradient-secure: linear-gradient(135deg, hsl(var(--secure-green)), hsl(var(--garden-green)));
 
-    /* Shadows */
+    /* Enhanced shadows */
     --shadow-rose: 0 10px 25px -5px hsl(var(--rose-pink) / 0.3);
     --shadow-garden: 0 8px 20px -3px hsl(var(--garden-green) / 0.2);
     --shadow-glow: 0 0 30px hsl(var(--golden-yellow) / 0.4);
+    --shadow-vip: 0 15px 35px -5px hsl(var(--vip-gold) / 0.4);
+    --shadow-secure: 0 5px 15px -3px hsl(var(--secure-green) / 0.3);
 
-    --radius: 1rem;
+    /* Enhanced border radius for modern look */
+    --radius: 1.2rem;
+    --radius-lg: 1.8rem;
+    --radius-xl: 2.4rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -147,5 +163,79 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    /* Enhanced mobile support */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Mobile-first responsive typography */
+  html {
+    font-size: 14px;
+  }
+
+  @media (min-width: 640px) {
+    html {
+      font-size: 16px;
+    }
+  }
+
+  /* Enhanced security styling */
+  .secure-input {
+    @apply bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950 dark:to-emerald-950;
+    @apply border-green-200 dark:border-green-800;
+    @apply focus:ring-green-500 focus:border-green-500;
+  }
+
+  /* VIP styling */
+  .vip-element {
+    @apply bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-950 dark:to-yellow-950;
+    @apply border-amber-200 dark:border-amber-800;
+    @apply shadow-vip;
+  }
+
+  /* Enhanced animations for mobile */
+  .mobile-optimized {
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Arabic font improvements */
+  .font-arabic {
+    font-family: 'Cairo', 'Amiri', system-ui, sans-serif;
+    font-feature-settings: "ss01" 1, "ss02" 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Accessibility improvements */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Enhanced focus indicators */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  /* Touch target improvements for mobile */
+  button, 
+  [role="button"],
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  @media (max-width: 640px) {
+    button,
+    [role="button"] {
+      min-height: 48px;
+    }
   }
 }
