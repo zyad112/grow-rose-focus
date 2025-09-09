@@ -10,6 +10,7 @@ import VipAccess from '@/components/VipAccess';
 import DeveloperInfo from '@/components/DeveloperInfo';
 import VipRose from '@/components/VipRose';
 import VipStats from '@/components/VipStats';
+import VipRewards from '@/components/VipRewards';
 import { useToast } from '@/hooks/use-toast';
 import { playGrowthSound, playSuccessSound } from '@/utils/sounds';
 import { playVipGrowthSound, playVipSuccessSound, playVipNotification, playVipLevelUp } from '@/utils/vipSounds';
@@ -169,53 +170,82 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-nature">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
+      {/* Header */}
         <div className="text-center mb-8 px-4">
           {/* Decorative App Name */}
           <div className="relative mb-6">
-            <div className="absolute inset-0 blur-2xl bg-gradient-sunset opacity-30 scale-110"></div>
+            <div className="absolute inset-0 blur-3xl bg-gradient-sunset opacity-40 scale-125 animate-pulse"></div>
+            <div className="absolute inset-0 blur-xl bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 opacity-20 scale-110 animate-ping"></div>
             <h1 className="relative text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 font-arabic">
-              <span className="inline-block bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 bg-clip-text text-transparent animate-pulse">
+              <span className="inline-block bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 bg-clip-text text-transparent animate-pulse drop-shadow-2xl">
                 🌺 zd flower ✨
               </span>
             </h1>
-            <div className="absolute -top-2 -right-2 text-2xl animate-bounce">🌸</div>
-            <div className="absolute -bottom-1 -left-2 text-xl animate-pulse">🌿</div>
+            <div className="absolute -top-4 -right-4 text-3xl animate-bounce drop-shadow-lg">🌸</div>
+            <div className="absolute -bottom-2 -left-4 text-2xl animate-pulse drop-shadow-lg">🌿</div>
+            <div className="absolute top-1/2 -right-8 text-xl animate-spin opacity-70">💫</div>
+            <div className="absolute top-1/4 -left-8 text-lg animate-bounce opacity-60">🦋</div>
           </div>
           
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed font-arabic px-4">
-            ادرس أو اعمل واترك هاتفك لتنمو زهرتك الجميلة. كلما زاد وقت التركيز، 
-            تتطور زهرتك إلى ألوان أزهى وأشكال أجمل!
-          </p>
+          <div className="relative bg-gradient-to-r from-white/80 to-pink-50/80 dark:from-gray-900/80 dark:to-purple-950/80 backdrop-blur-sm rounded-2xl p-6 border border-pink-200/50 dark:border-purple-800/50 shadow-xl">
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed font-arabic px-4">
+              🌸 ادرس أو اعمل واترك هاتفك لتنمو زهرتك الجميلة. كلما زاد وقت التركيز، 
+              تتطور زهرتك إلى ألوان أزهى وأشكال أجمل! انضم لعضوية VIP للحصول على زهور حقيقية وميزات متقدمة! ✨
+            </p>
+            <div className="mt-4 flex justify-center space-x-4 rtl:space-x-reverse">
+              <div className="flex items-center space-x-1 rtl:space-x-reverse text-sm text-purple-600 dark:text-purple-400">
+                <span>🎯</span>
+                <span className="font-arabic">تركيز</span>
+              </div>
+              <div className="flex items-center space-x-1 rtl:space-x-reverse text-sm text-green-600 dark:text-green-400">
+                <span>🌱</span>
+                <span className="font-arabic">نمو</span>
+              </div>
+              <div className="flex items-center space-x-1 rtl:space-x-reverse text-sm text-pink-600 dark:text-pink-400">
+                <span>✨</span>
+                <span className="font-arabic">إنجاز</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto px-4">
           {/* Rose Display - Main Focus */}
           <div className="lg:col-span-2">
-            <Card className="p-6 lg:p-8 bg-card/80 backdrop-blur-sm border-border shadow-garden relative overflow-hidden">
+            <Card className="p-6 lg:p-8 bg-gradient-to-br from-white/90 to-pink-50/90 dark:from-gray-900/90 dark:to-purple-950/90 backdrop-blur-md border-2 border-pink-200/50 dark:border-purple-800/50 shadow-2xl relative overflow-hidden">
+              {/* Animated Background Elements */}
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute -top-10 -right-10 w-20 h-20 bg-pink-200/30 dark:bg-pink-800/30 rounded-full animate-pulse"></div>
+                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-200/20 dark:bg-purple-800/20 rounded-full animate-bounce"></div>
+                <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-radial from-pink-100/10 to-transparent dark:from-pink-900/10 animate-spin opacity-50"></div>
+              </div>
+              
               {/* VIP Enhancement Indicator */}
               {isVipActive && (
                 <div className="absolute top-4 right-4 z-10">
-                  <div className="bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg animate-pulse flex items-center space-x-1">
+                  <div className="bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-2xl animate-pulse flex items-center space-x-2 rtl:space-x-reverse border-2 border-white/50">
                     <span>👑</span>
-                    <span className="font-arabic">VIP</span>
+                    <span className="font-arabic">VIP Premium</span>
+                    <span>✨</span>
                   </div>
                 </div>
               )}
               
-              {isVipActive ? (
-                <VipRose 
-                  stage={roseStage} 
-                  isDead={isDead} 
-                  isGrowing={isGrowing}
-                />
-              ) : (
-                <Rose 
-                  stage={roseStage} 
-                  isDead={isDead} 
-                  isGrowing={isGrowing}
-                />
-              )}
+              <div className="relative z-10">
+                {isVipActive ? (
+                  <VipRose 
+                    stage={roseStage} 
+                    isDead={isDead} 
+                    isGrowing={isGrowing}
+                  />
+                ) : (
+                  <Rose 
+                    stage={roseStage} 
+                    isDead={isDead} 
+                    isGrowing={isGrowing}
+                  />
+                )}
+              </div>
             </Card>
           </div>
 
@@ -230,9 +260,10 @@ const Index = () => {
 
             {/* Tabs for additional features */}
             <Tabs defaultValue="stats" className="w-full">
-              <TabsList className="grid w-full grid-cols-5 mb-4 text-xs">
+              <TabsList className="grid w-full grid-cols-6 mb-4 text-xs">
                 <TabsTrigger value="stats" className="text-xs font-arabic px-1">📊</TabsTrigger>
                 <TabsTrigger value="challenges" className="text-xs font-arabic px-1">🏆</TabsTrigger>
+                <TabsTrigger value="rewards" className="text-xs font-arabic px-1">💎</TabsTrigger>
                 <TabsTrigger value="vip" className="text-xs font-arabic px-1">👑</TabsTrigger>
                 <TabsTrigger value="developer" className="text-xs font-arabic px-1">👨‍💻</TabsTrigger>
                 <TabsTrigger value="settings" className="text-xs font-arabic px-1">⚙️</TabsTrigger>
@@ -264,6 +295,23 @@ const Index = () => {
                 />
               </TabsContent>
               
+              <TabsContent value="rewards">
+                {isVipActive ? (
+                  <VipRewards
+                    completedSessions={completedSessions}
+                    totalFocusTime={totalFocusTime}
+                    rosesGrown={rosesGrown}
+                  />
+                ) : (
+                  <div className="text-center p-8 bg-card/80 backdrop-blur-sm rounded-lg border border-border">
+                    <div className="text-4xl mb-4">🔒</div>
+                    <p className="text-muted-foreground font-arabic">
+                      المكافآت المتقدمة متاحة فقط لأعضاء VIP
+                    </p>
+                  </div>
+                )}
+              </TabsContent>
+              
               <TabsContent value="vip">
                 <VipAccess 
                   onVipUnlock={() => {
@@ -285,14 +333,33 @@ const Index = () => {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-16 space-y-4">
-          <div className="p-6 bg-gradient-nature/10 backdrop-blur-sm rounded-2xl border border-garden/20 max-w-md mx-auto">
-            <p className="text-sm text-muted-foreground font-arabic leading-relaxed">
-              💡 نصيحة: ضع هاتفك بعيداً واترك زهورك تنمو في هدوء وجمال
-            </p>
+        <div className="text-center mt-16 space-y-6">
+          <div className="relative">
+            <div className="absolute inset-0 blur-xl bg-gradient-to-r from-pink-300/30 via-purple-300/30 to-indigo-300/30 animate-pulse"></div>
+            <div className="relative p-8 bg-gradient-to-br from-white/80 to-pink-50/80 dark:from-gray-900/80 dark:to-purple-950/80 backdrop-blur-md rounded-3xl border-2 border-pink-200/50 dark:border-purple-800/50 shadow-2xl max-w-lg mx-auto">
+              <div className="flex items-center justify-center space-x-3 rtl:space-x-reverse mb-4">
+                <span className="text-3xl animate-bounce">💡</span>
+                <h3 className="text-xl font-bold font-arabic bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  نصائح للنجاح
+                </h3>
+                <span className="text-3xl animate-pulse">✨</span>
+              </div>
+              <p className="text-sm text-muted-foreground font-arabic leading-relaxed">
+                📱 ضع هاتفك بعيداً واترك زهورك تنمو في هدوء وجمال
+                <br />
+                🎯 ركز على مهمة واحدة في كل مرة
+                <br />
+                👑 فعّل عضوية VIP للحصول على زهور حقيقية وميزات متقدمة
+              </p>
+            </div>
           </div>
-          <div className="text-xs text-muted-foreground font-arabic">
-            🌸 zd flower - رحلتك نحو التركيز والإنتاجية
+          
+          <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse text-sm text-muted-foreground font-arabic">
+            <span className="animate-pulse">🌸</span>
+            <span>zd flower</span>
+            <span>-</span>
+            <span>رحلتك نحو التركيز والإنتاجية</span>
+            <span className="animate-bounce">🌺</span>
           </div>
         </div>
       </div>

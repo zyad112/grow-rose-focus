@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import roseStage0 from '@/assets/rose-stage-0.jpg';
-import roseStage1 from '@/assets/rose-stage-1.jpg';
-import roseStage2 from '@/assets/rose-stage-2.jpg';
-import roseStage3 from '@/assets/rose-stage-3.jpg';
-import roseStage4 from '@/assets/rose-stage-4.jpg';
-import roseDead from '@/assets/rose-dead.jpg';
+import vipRoseStage0 from '@/assets/vip-rose-stage-0.jpg';
+import vipRoseStage1 from '@/assets/vip-rose-stage-1.jpg';
+import vipRoseStage2 from '@/assets/vip-rose-stage-2.jpg';
+import vipRoseStage3 from '@/assets/vip-rose-stage-3.jpg';
+import vipRoseStage4 from '@/assets/vip-rose-stage-4.jpg';
+import vipRoseDead from '@/assets/vip-rose-dead.jpg';
 
 interface VipRoseProps {
   stage: number;
@@ -17,8 +17,8 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
   const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; color: string }>>([]);
   const [glowIntensity, setGlowIntensity] = useState(0);
 
-  const roseImages = [roseStage0, roseStage1, roseStage2, roseStage3, roseStage4];
-  const currentImage = isDead ? roseDead : roseImages[stage] || roseStage0;
+  const roseImages = [vipRoseStage0, vipRoseStage1, vipRoseStage2, vipRoseStage3, vipRoseStage4];
+  const currentImage = isDead ? vipRoseDead : roseImages[stage] || vipRoseStage0;
 
   // VIP enhanced particles effect
   useEffect(() => {
