@@ -20,11 +20,13 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
   const roseImages = [vipRoseStage0, vipRoseStage1, vipRoseStage2, vipRoseStage3, vipRoseStage4];
   const currentImage = isDead ? vipRoseDead : roseImages[stage] || vipRoseStage0;
 
-  // VIP enhanced particles effect
+  // Enhanced VIP particles effect
   useEffect(() => {
-    if (isGrowing && stage > 0) {
-      const colors = ['#ec4899', '#f59e0b', '#10b981', '#8b5cf6', '#ef4444'];
-      const newParticles = Array.from({ length: 12 }, (_, i) => ({
+    if (isGrowing && stage >= 0) {
+      const colors = ['#ec4899', '#f59e0b', '#10b981', '#8b5cf6', '#ef4444', '#06b6d4', '#f97316'];
+      const particleCount = 20; // More particles for VIP
+      
+      const newParticles = Array.from({ length: particleCount }, (_, i) => ({
         id: Date.now() + i,
         x: Math.random() * 100,
         y: Math.random() * 100,
@@ -32,14 +34,14 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
       }));
       setParticles(newParticles);
       
-      setTimeout(() => setParticles([]), 3000);
+      setTimeout(() => setParticles([]), 4000); // Longer duration for VIP
     }
   }, [isGrowing, stage]);
 
-  // VIP glow effect
+  // Enhanced VIP glow effect
   useEffect(() => {
-    if (stage > 0) {
-      setGlowIntensity(stage * 0.2 + 0.3);
+    if (stage >= 0) {
+      setGlowIntensity(0.2 + stage * 0.25 + 0.3); // Enhanced glow for VIP
     }
   }, [stage]);
 
@@ -74,17 +76,32 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
         isDead && "grayscale"
       )}>
         
-        {/* Enhanced Image */}
+        {/* Enhanced VIP Image */}
         <img
           src={currentImage}
-          alt={isDead ? "زهرة ذابلة" : getStageMessage()}
+          alt={isDead ? "زهرة ذابلة VIP" : getStageMessage()}
           className={cn(
             "w-full h-full object-cover transition-all duration-1000",
             "hover:scale-110 transform",
-            !isDead && stage > 0 && "filter brightness-110 contrast-110 saturate-125"
+            !isDead && stage >= 0 && "filter brightness-125 contrast-125 saturate-150",
+            isGrowing && "animate-pulse scale-105"
           )}
           style={{
-            filter: !isDead ? `hue-rotate(${stage * 15}deg) brightness(${1 + stage * 0.1})` : undefined
+            filter: !isDead ? `hue-rotate(${stage * 20}deg) brightness(${1.2 + stage * 0.15}) saturate(${1.3 + stage * 0.1})` : 'grayscale(100%)',
+            boxShadow: !isDead && stage > 0 ? `0 0 30px rgba(236, 72, 153, ${0.5 + stage * 0.1})` : undefined
+          }}
+          onError={(e) => {
+            console.error('VIP Rose image failed to load:', currentImage);
+            // Fallback to regular rose images if VIP images fail
+            const fallbackImages = [
+              '/src/assets/rose-stage-0.jpg',
+              '/src/assets/rose-stage-1.jpg', 
+              '/src/assets/rose-stage-2.jpg',
+              '/src/assets/rose-stage-3.jpg',
+              '/src/assets/rose-stage-4.jpg'
+            ];
+            const fallbackDead = '/src/assets/rose-dead.jpg';
+            e.currentTarget.src = isDead ? fallbackDead : fallbackImages[stage] || fallbackImages[0];
           }}
         />
 
@@ -126,7 +143,7 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
           {isDead ? "الزهرة ذبلت 😢" : getStageMessage()}
         </h3>
         
-        {!isDead && stage > 0 && (
+        {!isDead && stage >= 0 && (
           <div className="flex justify-center space-x-1">
             {Array.from({ length: 5 }).map((_, i) => (
               <div
