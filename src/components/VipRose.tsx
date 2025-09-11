@@ -7,6 +7,13 @@ import vipRoseStage3 from '@/assets/vip-rose-stage-3.jpg';
 import vipRoseStage4 from '@/assets/vip-rose-stage-4.jpg';
 import vipRoseDead from '@/assets/vip-rose-dead.jpg';
 
+// Fallback to regular rose images if VIP images fail
+import roseStage0 from '@/assets/rose-stage-0.jpg';
+import roseStage1 from '@/assets/rose-stage-1.jpg';
+import roseStage2 from '@/assets/rose-stage-2.jpg';
+import roseStage3 from '@/assets/rose-stage-3.jpg';
+import roseStage4 from '@/assets/rose-stage-4.jpg';
+import roseDeadImage from '@/assets/rose-dead.jpg';
 interface VipRoseProps {
   stage: number;
   isDead: boolean;
@@ -60,7 +67,7 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
     <div className="relative w-full max-w-md mx-auto">
       {/* VIP Glow Background */}
       <div 
-        className="absolute inset-0 rounded-full blur-3xl animate-pulse"
+        className="absolute inset-0 rounded-full blur-3xl animate-pulse pointer-events-none z-0"
         style={{
           background: `radial-gradient(circle, rgba(236, 72, 153, ${glowIntensity}) 0%, rgba(245, 158, 11, ${glowIntensity * 0.7}) 50%, transparent 70%)`,
           transform: 'scale(1.2)',
@@ -80,8 +87,10 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
         <img
           src={currentImage}
           alt={isDead ? "زهرة ذابلة VIP" : getStageMessage()}
+          loading="eager"
+          decoding="async"
           className={cn(
-            "w-full h-full object-cover transition-all duration-1000",
+            "relative z-10 w-full h-full object-cover transition-all duration-1000",
             "hover:scale-110 transform",
             !isDead && stage >= 0 && "filter brightness-125 contrast-125 saturate-150",
             isGrowing && "animate-pulse scale-105"
@@ -92,16 +101,10 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
           }}
           onError={(e) => {
             console.error('VIP Rose image failed to load:', currentImage);
-            // Fallback to regular rose images if VIP images fail
-            const fallbackImages = [
-              '/src/assets/rose-stage-0.jpg',
-              '/src/assets/rose-stage-1.jpg', 
-              '/src/assets/rose-stage-2.jpg',
-              '/src/assets/rose-stage-3.jpg',
-              '/src/assets/rose-stage-4.jpg'
-            ];
-            const fallbackDead = '/src/assets/rose-dead.jpg';
-            e.currentTarget.src = isDead ? fallbackDead : fallbackImages[stage] || fallbackImages[0];
+            // Prevent infinite loop
+            (e.currentTarget as HTMLImageElement).onerror = null;
+            const fallbacks = [roseStage0, roseStage1, roseStage2, roseStage3, roseStage4];
+            e.currentTarget.src = isDead ? roseDeadImage : (fallbacks[stage] || roseStage0);
           }}
         />
 
@@ -109,7 +112,7 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
         {particles.map((particle) => (
           <div
             key={particle.id}
-            className="absolute w-2 h-2 rounded-full animate-ping opacity-75"
+            className="absolute z-20 w-2 h-2 rounded-full animate-ping opacity-75"
             style={{
               left: `${particle.x}%`,
               top: `${particle.y}%`,
@@ -120,8 +123,8 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
         ))}
 
         {/* VIP Border Effect */}
-        <div className="absolute inset-0 border-4 border-transparent bg-gradient-to-r from-amber-400 via-rose-400 to-purple-400 rounded-3xl">
-          <div className="w-full h-full bg-gradient-to-br from-background/90 to-background/70 rounded-2xl m-1" />
+        <div className="absolute inset-0 pointer-events-none z-0 border-4 border-transparent bg-gradient-to-r from-amber-400 via-rose-400 to-purple-400 rounded-3xl">
+          <div className="w-full h-full rounded-2xl m-1 bg-transparent" />
         </div>
 
         {/* Stage Indicator */}
@@ -170,24 +173,5 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
   );
 };
 
-// Add sparkle animation
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes sparkle {
-    0% { 
-      opacity: 1; 
-      transform: scale(0) rotate(0deg); 
-    }
-    50% { 
-      opacity: 1; 
-      transform: scale(1) rotate(180deg); 
-    }
-    100% { 
-      opacity: 0; 
-      transform: scale(0) rotate(360deg); 
-    }
-  }
-`;
-document.head.appendChild(style);
 
 export default VipRose;

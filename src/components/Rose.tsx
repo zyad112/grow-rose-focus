@@ -58,7 +58,9 @@ const Rose = ({ stage, isDead, isGrowing }: RoseProps) => {
           <img
             src={currentImage}
             alt={`Flower stage ${stage}`}
-            className="w-full h-full object-cover transition-all duration-500"
+            loading="eager"
+            decoding="async"
+            className="relative z-10 w-full h-full object-cover transition-all duration-500"
           />
           
           {/* Magical particles effect for blooming */}
