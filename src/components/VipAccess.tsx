@@ -4,22 +4,30 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Crown, Lock, Unlock, Sparkles, Star, Gem } from 'lucide-react';
+import { Crown, Lock, Unlock, Sparkles, Star, Gem, Zap, Shield, Diamond } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface VipAccessProps {
-  onVipUnlock?: () => void;
+  onVipUnlock?: (level: number) => void;
+  vipLevel?: number;
 }
 
-const VipAccess = ({ onVipUnlock }: VipAccessProps) => {
+const VIP_CODES = {
+  'ZYAD10102007': { level: 1, name: 'الغابة السحرية', theme: 'forest' },
+  'ZYAD10102008': { level: 2, name: 'النجوم السماوية', theme: 'celestial' },
+  'ZYAD10102009': { level: 3, name: 'نار العنقاء', theme: 'phoenix' },
+  'ZYAD10102010': { level: 4, name: 'كريستال الماس', theme: 'crystal' },
+  'ZYAD10102011': { level: 5, name: 'ظلال الفراغ', theme: 'void' },
+  'ZYAD10102012': { level: 6, name: 'عجلة الزمن', theme: 'time' },
+  'ZYAD10102013': { level: 7, name: 'النور الإلهي', theme: 'divine' }
+};
+
+const VipAccess = ({ onVipUnlock, vipLevel = 0 }: VipAccessProps) => {
   const [code, setCode] = useState('');
-  const [isVip, setIsVip] = useState(() => {
-    return localStorage.getItem('vipAccess') === 'true';
-  });
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const VIP_CODE = 'ZYAD10102007';
+  const currentVipData = vipLevel > 0 ? Object.values(VIP_CODES).find(vip => vip.level === vipLevel) : null;
   
   const handleVerify = async () => {
     setIsLoading(true);
@@ -27,14 +35,17 @@ const VipAccess = ({ onVipUnlock }: VipAccessProps) => {
     // Simulate verification process
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    if (code === VIP_CODE) {
-      setIsVip(true);
+    const vipData = VIP_CODES[code as keyof typeof VIP_CODES];
+    
+    if (vipData) {
+      // Save VIP level to localStorage
+      localStorage.setItem('vipLevel', vipData.level.toString());
       localStorage.setItem('vipAccess', 'true');
-      onVipUnlock?.();
+      onVipUnlock?.(vipData.level);
       
       toast({
-        title: '🎉 مبروك! تم فتح الميزات المتقدمة',
-        description: 'أصبح بإمكانك الوصول لجميع الميزات الحصرية',
+        title: `🎉 مبروك! تم فتح ${vipData.name}`,
+        description: `أصبحت عضو VIP مستوى ${vipData.level} - ${vipData.name}`,
         duration: 4000,
       });
       
@@ -51,32 +62,52 @@ const VipAccess = ({ onVipUnlock }: VipAccessProps) => {
     setIsLoading(false);
   };
 
-  const vipFeatures = [
-    { icon: <Sparkles className="w-4 h-4" />, name: 'أزهار حصرية متحركة' },
-    { icon: <Star className="w-4 h-4" />, name: 'إحصائيات متقدمة مفصلة' },
-    { icon: <Gem className="w-4 h-4" />, name: 'أصوات طبيعية عالية الجودة' },
-    { icon: <Crown className="w-4 h-4" />, name: 'تحديات خاصة وجوائز' },
-  ];
+  const getVipFeatures = (level: number) => {
+    const allFeatures = [
+      { icon: <Sparkles className="w-4 h-4" />, name: 'أزهار الغابة السحرية', level: 1 },
+      { icon: <Star className="w-4 h-4" />, name: 'أزهار النجوم السماوية', level: 2 },
+      { icon: <Zap className="w-4 h-4" />, name: 'أزهار نار العنقاء', level: 3 },
+      { icon: <Diamond className="w-4 h-4" />, name: 'أزهار كريستال الماس', level: 4 },
+      { icon: <Shield className="w-4 h-4" />, name: 'أزهار ظلال الفراغ', level: 5 },
+      { icon: <Gem className="w-4 h-4" />, name: 'أزهار عجلة الزمن', level: 6 },
+      { icon: <Crown className="w-4 h-4" />, name: 'أزهار النور الإلهي', level: 7 },
+    ];
+    
+    return allFeatures.filter(feature => feature.level <= level);
+  };
 
-  if (isVip) {
+  const getThemeClasses = (theme: string) => {
+    const themes = {
+      forest: 'from-emerald-50/50 to-green-50/50 dark:from-emerald-950/30 dark:to-green-950/30 border-emerald-200/50 dark:border-emerald-800/50',
+      celestial: 'from-blue-50/50 to-indigo-50/50 dark:from-blue-950/30 dark:to-indigo-950/30 border-blue-200/50 dark:border-blue-800/50',
+      phoenix: 'from-orange-50/50 to-red-50/50 dark:from-orange-950/30 dark:to-red-950/30 border-orange-200/50 dark:border-orange-800/50',
+      crystal: 'from-gray-50/50 to-slate-50/50 dark:from-gray-950/30 dark:to-slate-950/30 border-gray-200/50 dark:border-gray-800/50',
+      void: 'from-purple-50/50 to-violet-50/50 dark:from-purple-950/30 dark:to-violet-950/30 border-purple-200/50 dark:border-purple-800/50',
+      time: 'from-amber-50/50 to-yellow-50/50 dark:from-amber-950/30 dark:to-yellow-950/30 border-amber-200/50 dark:border-amber-800/50',
+      divine: 'from-pink-50/50 to-rose-50/50 dark:from-pink-950/30 dark:to-rose-950/30 border-pink-200/50 dark:border-pink-800/50'
+    };
+    return themes[theme as keyof typeof themes] || themes.forest;
+  };
+
+  if (vipLevel > 0 && currentVipData) {
     return (
-      <Card className="p-6 bg-gradient-to-br from-amber-50/50 to-yellow-50/50 dark:from-amber-950/30 dark:to-yellow-950/30 border-amber-200/50 dark:border-amber-800/50 backdrop-blur-sm shadow-glow">
+      <Card className={`p-6 bg-gradient-to-br ${getThemeClasses(currentVipData.theme)} backdrop-blur-sm shadow-glow`}>
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-2">
             <Crown className="w-6 h-6 text-amber-500" />
             <Badge variant="secondary" className="bg-gradient-to-r from-amber-100 to-yellow-100 dark:from-amber-800 dark:to-yellow-800 text-amber-800 dark:text-amber-100 px-3 py-1">
               <Unlock className="w-3 h-3 mr-1" />
-              عضو مميز VIP
+              VIP مستوى {vipLevel}
             </Badge>
           </div>
           
           <div className="space-y-3">
             <h3 className="text-lg font-bold text-foreground font-arabic">
-              🌟 الميزات المتقدمة مفعلة
+              🌟 {currentVipData.name} مُفعل
             </h3>
             
             <div className="grid grid-cols-1 gap-2 text-sm">
-              {vipFeatures.map((feature, index) => (
+              {getVipFeatures(vipLevel).map((feature, index) => (
                 <div key={index} className="flex items-center justify-center space-x-2 text-muted-foreground">
                   <span className="text-amber-500">{feature.icon}</span>
                   <span className="font-arabic">{feature.name}</span>
@@ -87,7 +118,26 @@ const VipAccess = ({ onVipUnlock }: VipAccessProps) => {
 
           <div className="p-3 bg-gradient-sunset/10 rounded-lg border border-amber-200/30">
             <p className="text-xs text-muted-foreground font-arabic">
-              ✨ استمتع بتجربة حصرية مع الأزهار المتقدمة
+              ✨ استمتع بتجربة {currentVipData.name} الحصرية
+            </p>
+          </div>
+
+          {/* Level Progress */}
+          <div className="space-y-2">
+            <div className="flex justify-center space-x-1">
+              {Array.from({ length: 7 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-3 h-3 rounded-full transition-all duration-500 ${
+                    i < vipLevel 
+                      ? "bg-gradient-to-r from-amber-400 to-rose-400 shadow-lg animate-pulse" 
+                      : "bg-gray-300 dark:bg-gray-700"
+                  }`}
+                />
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              المستوى {vipLevel} من 7
             </p>
           </div>
         </div>
@@ -102,18 +152,18 @@ const VipAccess = ({ onVipUnlock }: VipAccessProps) => {
           <div className="flex items-center justify-center space-x-2 mb-3">
             <Crown className="w-6 h-6 text-amber-500" />
             <h3 className="text-xl font-bold text-foreground font-arabic">
-              الوصول المتقدم
+              الوصول المتقدم VIP
             </h3>
           </div>
           <p className="text-sm text-muted-foreground">
-            أدخل الكود الخاص للوصول للميزات الحصرية
+            أدخل الكود الخاص للوصول للمستويات الحصرية
           </p>
         </div>
 
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="vip-code" className="text-sm font-medium font-arabic">
-              كود الوصول المتقدم
+              كود المستوى VIP
             </Label>
             <Input
               id="vip-code"
@@ -145,17 +195,21 @@ const VipAccess = ({ onVipUnlock }: VipAccessProps) => {
           </Button>
         </div>
 
+        {/* Available VIP Levels */}
         <div className="space-y-3">
           <h4 className="text-sm font-semibold text-foreground font-arabic text-center">
-            الميزات المتقدمة المتاحة:
+            مستويات VIP المتاحة:
           </h4>
           
-          <div className="grid grid-cols-1 gap-2">
-            {vipFeatures.map((feature, index) => (
+          <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto">
+            {Object.values(VIP_CODES).map((vipData, index) => (
               <div key={index} className="flex items-center space-x-2 p-2 bg-muted/50 rounded-lg">
-                <span className="text-muted-foreground">{feature.icon}</span>
-                <span className="text-sm text-muted-foreground font-arabic">{feature.name}</span>
-                <Lock className="w-3 h-3 text-muted-foreground ml-auto" />
+                <Crown className="w-4 h-4 text-amber-500" />
+                <div className="flex-1">
+                  <span className="text-sm font-medium font-arabic">{vipData.name}</span>
+                  <div className="text-xs text-muted-foreground">مستوى {vipData.level}</div>
+                </div>
+                <Lock className="w-3 h-3 text-muted-foreground" />
               </div>
             ))}
           </div>
@@ -163,7 +217,7 @@ const VipAccess = ({ onVipUnlock }: VipAccessProps) => {
 
         <div className="p-3 bg-amber-50/50 dark:bg-amber-950/20 rounded-lg border border-amber-200/30">
           <p className="text-xs text-center text-muted-foreground font-arabic">
-            🔐 الميزات المتقدمة محمية بكود أمان خاص
+            🔐 كل مستوى VIP يحتوي على أزهار وخلفيات حصرية مختلفة
           </p>
         </div>
       </div>

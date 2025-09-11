@@ -1,37 +1,84 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import vipRoseStage0 from '@/assets/vip-rose-stage-0.jpg';
-import vipRoseStage1 from '@/assets/vip-rose-stage-1.jpg';
-import vipRoseStage2 from '@/assets/vip-rose-stage-2.jpg';
-import vipRoseStage3 from '@/assets/vip-rose-stage-3.jpg';
-import vipRoseStage4 from '@/assets/vip-rose-stage-4.jpg';
-import vipRoseDead from '@/assets/vip-rose-dead.jpg';
 
-// Fallback to regular rose images if VIP images fail
+// VIP Level 1 - Forest Theme
+import vipLevel1Stage0 from '@/assets/vip-level1-stage-0.jpg';
+import vipLevel1Stage1 from '@/assets/vip-level1-stage-1.jpg';
+import vipLevel1Stage2 from '@/assets/vip-level1-stage-2.jpg';
+import vipLevel1Stage3 from '@/assets/vip-level1-stage-3.jpg';
+import vipLevel1Stage4 from '@/assets/vip-level1-stage-4.jpg';
+import vipLevel1Dead from '@/assets/vip-level1-dead.jpg';
+
+// VIP Level 2 - Celestial Theme
+import vipLevel2Stage0 from '@/assets/vip-level2-stage-0.jpg';
+import vipLevel2Stage1 from '@/assets/vip-level2-stage-1.jpg';
+import vipLevel2Stage2 from '@/assets/vip-level2-stage-2.jpg';
+import vipLevel2Stage3 from '@/assets/vip-level2-stage-3.jpg';
+import vipLevel2Stage4 from '@/assets/vip-level2-stage-4.jpg';
+import vipLevel2Dead from '@/assets/vip-level2-dead.jpg';
+
+// VIP Level 7 - Divine Theme
+import vipLevel7Stage0 from '@/assets/vip-level7-stage-0.jpg';
+import vipLevel7Stage1 from '@/assets/vip-level7-stage-1.jpg';
+import vipLevel7Stage4 from '@/assets/vip-level7-stage-4.jpg';
+
+// Fallback to regular rose images
 import roseStage0 from '@/assets/rose-stage-0.jpg';
 import roseStage1 from '@/assets/rose-stage-1.jpg';
 import roseStage2 from '@/assets/rose-stage-2.jpg';
 import roseStage3 from '@/assets/rose-stage-3.jpg';
 import roseStage4 from '@/assets/rose-stage-4.jpg';
 import roseDeadImage from '@/assets/rose-dead.jpg';
+
 interface VipRoseProps {
   stage: number;
   isDead: boolean;
   isGrowing: boolean;
+  vipLevel?: number;
 }
 
-const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
+const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
   const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; color: string }>>([]);
   const [glowIntensity, setGlowIntensity] = useState(0);
 
-  const roseImages = [vipRoseStage0, vipRoseStage1, vipRoseStage2, vipRoseStage3, vipRoseStage4];
-  const currentImage = isDead ? vipRoseDead : roseImages[stage] || vipRoseStage0;
+  // VIP Flower Images by Level
+  const getVipImages = (level: number) => {
+    const vipSets = {
+      1: [vipLevel1Stage0, vipLevel1Stage1, vipLevel1Stage2, vipLevel1Stage3, vipLevel1Stage4],
+      2: [vipLevel2Stage0, vipLevel2Stage1, vipLevel2Stage2, vipLevel2Stage3, vipLevel2Stage4],
+      7: [vipLevel7Stage0, vipLevel7Stage1, roseStage2, roseStage3, vipLevel7Stage4], // Mix with fallbacks
+    };
+    
+    return vipSets[level as keyof typeof vipSets] || [roseStage0, roseStage1, roseStage2, roseStage3, roseStage4];
+  };
 
-  // Enhanced VIP particles effect
+  const getVipDeadImage = (level: number) => {
+    const deadImages = {
+      1: vipLevel1Dead,
+      2: vipLevel2Dead,
+    };
+    
+    return deadImages[level as keyof typeof deadImages] || roseDeadImage;
+  };
+
+  const roseImages = getVipImages(vipLevel);
+  const currentImage = isDead ? getVipDeadImage(vipLevel) : roseImages[stage] || roseImages[0];
+
+  // Enhanced VIP particles effect based on level
   useEffect(() => {
     if (isGrowing && stage >= 0) {
-      const colors = ['#ec4899', '#f59e0b', '#10b981', '#8b5cf6', '#ef4444', '#06b6d4', '#f97316'];
-      const particleCount = 20; // More particles for VIP
+      const levelColors = {
+        1: ['#10b981', '#34d399', '#6ee7b7', '#a7f3d0'], // Forest greens
+        2: ['#3b82f6', '#60a5fa', '#93c5fd', '#dbeafe'], // Celestial blues
+        3: ['#f97316', '#fb923c', '#fed7aa', '#fef3c7'], // Phoenix oranges
+        4: ['#f3f4f6', '#e5e7eb', '#d1d5db', '#9ca3af'], // Crystal grays
+        5: ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe'], // Void purples
+        6: ['#f59e0b', '#fbbf24', '#fcd34d', '#fde68a'], // Time golds
+        7: ['#ec4899', '#f472b6', '#f9a8d4', '#fce7f3'], // Divine pinks
+      };
+      
+      const colors = levelColors[vipLevel as keyof typeof levelColors] || levelColors[1];
+      const particleCount = 15 + vipLevel * 3; // More particles for higher levels
       
       const newParticles = Array.from({ length: particleCount }, (_, i) => ({
         id: Date.now() + i,
@@ -41,36 +88,75 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
       }));
       setParticles(newParticles);
       
-      setTimeout(() => setParticles([]), 4000); // Longer duration for VIP
+      setTimeout(() => setParticles([]), 3000 + vipLevel * 500); // Longer duration for higher levels
     }
-  }, [isGrowing, stage]);
+  }, [isGrowing, stage, vipLevel]);
 
-  // Enhanced VIP glow effect
+  // Enhanced VIP glow effect based on level
   useEffect(() => {
     if (stage >= 0) {
-      setGlowIntensity(0.2 + stage * 0.25 + 0.3); // Enhanced glow for VIP
+      setGlowIntensity(0.1 + stage * 0.15 + vipLevel * 0.05); // Enhanced glow based on level
     }
-  }, [stage]);
+  }, [stage, vipLevel]);
 
   const getStageMessage = () => {
-    const vipMessages = [
-      '🌱 البذرة المباركة تنبت',
-      '🌿 البراعم الذهبية تظهر', 
-      '🍃 الأوراق الماسية تتألق',
-      '🌺 البرعم الملكي يتكون',
-      '🌸✨ الزهرة الإمبراطورية تتفتح'
-    ];
-    return vipMessages[stage] || vipMessages[0];
+    const levelMessages = {
+      1: [ // Forest Theme
+        '🌱 بذرة الغابة السحرية تنبت',
+        '🌿 براعم الطبيعة الخضراء تظهر', 
+        '🍃 أوراق الغابة المقدسة تتألق',
+        '🌺 برعم الطبيعة الساحر يتكون',
+        '🌸✨ زهرة الغابة الأسطورية تتفتح'
+      ],
+      2: [ // Celestial Theme
+        '⭐ بذرة النجوم الكونية تنبت',
+        '🌟 براعم المجرة الزرقاء تظهر',
+        '💫 أوراق السماء المضيئة تتألق',
+        '🌌 برعم الكون السحري يتكون',
+        '✨🌸 زهرة النجوم الإلهية تتفتح'
+      ],
+      7: [ // Divine Theme
+        '🌈 بذرة النور الإلهي تنبت',
+        '👼 براعم السماء المقدسة تظهر',
+        '✨ أوراق الملائكة تتألق',
+        '🕊️ برعم الجنة يتكون',
+        '🌸🌈 زهرة النور المقدس تتفتح'
+      ]
+    };
+    
+    const messages = levelMessages[vipLevel as keyof typeof levelMessages] || levelMessages[1];
+    return messages[stage] || messages[0];
+  };
+
+  const getThemeClasses = () => {
+    const themes = {
+      1: 'from-emerald-500/20 to-green-500/20', // Forest
+      2: 'from-blue-500/20 to-indigo-500/20', // Celestial
+      3: 'from-orange-500/20 to-red-500/20', // Phoenix
+      4: 'from-gray-500/20 to-slate-500/20', // Crystal
+      5: 'from-purple-500/20 to-violet-500/20', // Void
+      6: 'from-amber-500/20 to-yellow-500/20', // Time
+      7: 'from-pink-500/20 to-rose-500/20', // Divine
+    };
+    
+    return themes[vipLevel as keyof typeof themes] || themes[1];
+  };
+
+  const getLevelIcon = () => {
+    const icons = {
+      1: '🌲', 2: '⭐', 3: '🔥', 4: '💎', 5: '🌙', 6: '⚡', 7: '👑'
+    };
+    return icons[vipLevel as keyof typeof icons] || '🌸';
   };
 
   return (
     <div className="relative w-full max-w-md mx-auto">
-      {/* VIP Glow Background */}
+      {/* Enhanced VIP Glow Background */}
       <div 
-        className="absolute inset-0 rounded-full blur-3xl animate-pulse pointer-events-none z-0"
+        className={`absolute inset-0 rounded-full blur-3xl animate-pulse pointer-events-none z-0`}
         style={{
-          background: `radial-gradient(circle, rgba(236, 72, 153, ${glowIntensity}) 0%, rgba(245, 158, 11, ${glowIntensity * 0.7}) 50%, transparent 70%)`,
-          transform: 'scale(1.2)',
+          background: `radial-gradient(circle, ${getThemeClasses().split(' ')[0].replace('from-', '').replace('/20', '/40')} 0%, ${getThemeClasses().split(' ')[1].replace('to-', '').replace('/20', '/20')} 50%, transparent 70%)`,
+          transform: 'scale(1.3)',
         }}
       />
 
@@ -78,7 +164,7 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
       <div className={cn(
         "relative aspect-square rounded-3xl overflow-hidden shadow-2xl transition-all duration-1000",
         "border-4 border-gradient-to-r from-amber-300 via-rose-300 to-purple-300",
-        "bg-gradient-to-br from-rose-50/90 to-pink-50/90 dark:from-rose-950/90 dark:to-pink-950/90",
+        `bg-gradient-to-br ${getThemeClasses()}`,
         isGrowing && "animate-pulse scale-105",
         isDead && "grayscale"
       )}>
@@ -86,7 +172,7 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
         {/* Enhanced VIP Image */}
         <img
           src={currentImage}
-          alt={isDead ? "زهرة ذابلة VIP" : getStageMessage()}
+          alt={isDead ? `زهرة ذابلة VIP مستوى ${vipLevel}` : getStageMessage()}
           loading="eager"
           decoding="async"
           className={cn(
@@ -96,12 +182,11 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
             isGrowing && "animate-pulse scale-105"
           )}
           style={{
-            filter: !isDead ? `hue-rotate(${stage * 20}deg) brightness(${1.2 + stage * 0.15}) saturate(${1.3 + stage * 0.1})` : 'grayscale(100%)',
-            boxShadow: !isDead && stage > 0 ? `0 0 30px rgba(236, 72, 153, ${0.5 + stage * 0.1})` : undefined
+            filter: !isDead ? `hue-rotate(${stage * 15 + vipLevel * 10}deg) brightness(${1.1 + stage * 0.1 + vipLevel * 0.05}) saturate(${1.2 + stage * 0.1})` : 'grayscale(100%)',
+            boxShadow: !isDead && stage > 0 ? `0 0 40px rgba(236, 72, 153, ${0.3 + stage * 0.1 + vipLevel * 0.05})` : undefined
           }}
           onError={(e) => {
             console.error('VIP Rose image failed to load:', currentImage);
-            // Prevent infinite loop
             (e.currentTarget as HTMLImageElement).onerror = null;
             const fallbacks = [roseStage0, roseStage1, roseStage2, roseStage3, roseStage4];
             e.currentTarget.src = isDead ? roseDeadImage : (fallbacks[stage] || roseStage0);
@@ -117,25 +202,25 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
               left: `${particle.x}%`,
               top: `${particle.y}%`,
               backgroundColor: particle.color,
-              animation: 'sparkle 3s ease-out forwards'
+              animation: `sparkle ${2 + Math.random() * 2}s ease-out forwards`
             }}
           />
         ))}
 
-        {/* VIP Border Effect */}
-        <div className="absolute inset-0 pointer-events-none z-0 border-4 border-transparent bg-gradient-to-r from-amber-400 via-rose-400 to-purple-400 rounded-3xl">
-          <div className="w-full h-full rounded-2xl m-1 bg-transparent" />
+        {/* VIP Level Badge */}
+        <div className="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+          {isDead ? '💀' : `${getLevelIcon()} VIP-${vipLevel}`}
         </div>
 
-        {/* Stage Indicator */}
-        <div className="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-          {isDead ? '💀' : `✨ ${stage + 1}/5`}
+        {/* Stage Progress */}
+        <div className="absolute top-4 left-4 bg-black/20 backdrop-blur-sm text-white px-2 py-1 rounded-full text-xs">
+          {isDead ? '0/5' : `${stage + 1}/5`}
         </div>
 
         {/* VIP Crown for advanced stages */}
         {stage >= 3 && !isDead && (
-          <div className="absolute top-2 left-2 text-2xl animate-bounce">
-            👑
+          <div className="absolute top-2 left-1/2 transform -translate-x-1/2 text-3xl animate-bounce">
+            {vipLevel >= 5 ? '👑' : vipLevel >= 3 ? '💎' : '⭐'}
           </div>
         )}
       </div>
@@ -154,7 +239,7 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
                 className={cn(
                   "w-3 h-3 rounded-full transition-all duration-500",
                   i <= stage 
-                    ? "bg-gradient-to-r from-amber-400 to-rose-400 shadow-lg animate-pulse" 
+                    ? `bg-gradient-to-r ${getThemeClasses()} shadow-lg animate-pulse` 
                     : "bg-gray-300 dark:bg-gray-700"
                 )}
               />
@@ -166,12 +251,11 @@ const VipRose = ({ stage, isDead, isGrowing }: VipRoseProps) => {
       {/* VIP Achievement Badge */}
       {stage === 4 && !isDead && (
         <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-xl animate-pulse">
-          🏆 إنجاز ملكي
+          {getLevelIcon()} إنجاز VIP مستوى {vipLevel}
         </div>
       )}
     </div>
   );
 };
-
 
 export default VipRose;
