@@ -22,6 +22,12 @@ import vipLevel7Stage0 from '@/assets/vip-level7-stage-0.jpg';
 import vipLevel7Stage1 from '@/assets/vip-level7-stage-1.jpg';
 import vipLevel7Stage4 from '@/assets/vip-level7-stage-4.jpg';
 
+// VIP Level 8 - Ultra Theme
+import vipLevel8Stage0 from '@/assets/vip-level8-stage-0.jpg';
+import vipLevel8Stage1 from '@/assets/vip-level8-stage-1.jpg';
+import vipLevel8Stage4 from '@/assets/vip-level8-stage-4.jpg';
+import vipLevel8Dead from '@/assets/vip-level8-dead.jpg';
+
 // Fallback to regular rose images
 import roseStage0 from '@/assets/rose-stage-0.jpg';
 import roseStage1 from '@/assets/rose-stage-1.jpg';
@@ -47,6 +53,7 @@ const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
       1: [vipLevel1Stage0, vipLevel1Stage1, vipLevel1Stage2, vipLevel1Stage3, vipLevel1Stage4],
       2: [vipLevel2Stage0, vipLevel2Stage1, vipLevel2Stage2, vipLevel2Stage3, vipLevel2Stage4],
       7: [vipLevel7Stage0, vipLevel7Stage1, roseStage2, roseStage3, vipLevel7Stage4], // Mix with fallbacks
+      8: [vipLevel8Stage0, vipLevel8Stage1, roseStage2, roseStage3, vipLevel8Stage4], // Ultra level
     };
     
     return vipSets[level as keyof typeof vipSets] || [roseStage0, roseStage1, roseStage2, roseStage3, roseStage4];
@@ -56,6 +63,7 @@ const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
     const deadImages = {
       1: vipLevel1Dead,
       2: vipLevel2Dead,
+      8: vipLevel8Dead,
     };
     
     return deadImages[level as keyof typeof deadImages] || roseDeadImage;
@@ -75,6 +83,7 @@ const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
         5: ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe'], // Void purples
         6: ['#f59e0b', '#fbbf24', '#fcd34d', '#fde68a'], // Time golds
         7: ['#ec4899', '#f472b6', '#f9a8d4', '#fce7f3'], // Divine pinks
+        8: ['#00d9ff', '#8b5cf6', '#ec4899', '#f97316'], // Ultra cyber colors
       };
       
       const colors = levelColors[vipLevel as keyof typeof levelColors] || levelColors[1];
@@ -116,11 +125,18 @@ const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
         '✨🌸 زهرة النجوم الإلهية تتفتح'
       ],
       7: [ // Divine Theme
-        '🌈 بذرة النور الإلهي تنبت',
+        '🌈 بذرة القوة الملكية تنبت',
         '👼 براعم السماء المقدسة تظهر',
         '✨ أوراق الملائكة تتألق',
         '🕊️ برعم الجنة يتكون',
-        '🌸🌈 زهرة النور المقدس تتفتح'
+        '🌸🌈 زهرة القوة الملكية تتفتح'
+      ],
+      8: [ // Ultra Theme
+        '🚀 بذرة المستقبل الخارقة تنبت',
+        '⚡ براعم السايبر المتطورة تظهر',
+        '💎 أوراق الهولوجرام تتألق',
+        '🌌 برعم الذكاء الاصطناعي يتكون',
+        '🌸🚀 زهرة المستوى الخارق تتفتح'
       ]
     };
     
@@ -137,6 +153,7 @@ const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
       5: 'from-purple-500/20 to-violet-500/20', // Void
       6: 'from-amber-500/20 to-yellow-500/20', // Time
       7: 'from-pink-500/20 to-rose-500/20', // Divine
+      8: 'from-cyan-500/20 to-purple-500/20', // Ultra
     };
     
     return themes[vipLevel as keyof typeof themes] || themes[1];
@@ -144,7 +161,7 @@ const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
 
   const getLevelIcon = () => {
     const icons = {
-      1: '🌲', 2: '⭐', 3: '🔥', 4: '💎', 5: '🌙', 6: '⚡', 7: '👑'
+      1: '🌲', 2: '⭐', 3: '🔥', 4: '💎', 5: '🌙', 6: '⚡', 7: '👑', 8: '🚀'
     };
     return icons[vipLevel as keyof typeof icons] || '🌸';
   };
@@ -219,8 +236,8 @@ const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
 
         {/* VIP Crown for advanced stages */}
         {stage >= 3 && !isDead && (
-          <div className="absolute top-2 left-1/2 transform -translate-x-1/2 text-3xl animate-bounce">
-            {vipLevel >= 5 ? '👑' : vipLevel >= 3 ? '💎' : '⭐'}
+          <div className={`absolute top-2 left-1/2 transform -translate-x-1/2 text-3xl ${vipLevel === 8 ? 'animate-cyber-pulse' : 'animate-bounce'}`}>
+            {vipLevel === 8 ? '🚀' : vipLevel >= 5 ? '👑' : vipLevel >= 3 ? '💎' : '⭐'}
           </div>
         )}
       </div>
@@ -250,8 +267,8 @@ const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
 
       {/* VIP Achievement Badge */}
       {stage === 4 && !isDead && (
-        <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-xl animate-pulse">
-          {getLevelIcon()} إنجاز VIP مستوى {vipLevel}
+        <div className={`absolute -bottom-6 left-1/2 transform -translate-x-1/2 ${vipLevel === 8 ? 'bg-gradient-to-r from-cyan-500 to-purple-600 animate-cyber-pulse' : 'bg-gradient-to-r from-purple-600 to-pink-600 animate-pulse'} text-white px-4 py-2 rounded-full text-sm font-bold shadow-xl`}>
+          {getLevelIcon()} إنجاز VIP مستوى {vipLevel} {vipLevel === 8 && '🚀 ULTRA'}
         </div>
       )}
     </div>

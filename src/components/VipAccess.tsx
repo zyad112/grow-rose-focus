@@ -19,7 +19,8 @@ const VIP_CODES = {
   'ZYAD10102010': { level: 4, name: 'كريستال الماس', theme: 'crystal' },
   'ZYAD10102011': { level: 5, name: 'ظلال الفراغ', theme: 'void' },
   'ZYAD10102012': { level: 6, name: 'عجلة الزمن', theme: 'time' },
-  'ZYAD10102013': { level: 7, name: 'النور الإلهي', theme: 'divine' }
+  'ZYAD10102013': { level: 7, name: 'القوة الملكية', theme: 'divine' },
+  'ZYAD10102007PRO': { level: 8, name: 'المستوى الخارق', theme: 'ultra' }
 };
 
 const VipAccess = ({ onVipUnlock, vipLevel = 0 }: VipAccessProps) => {
@@ -70,7 +71,13 @@ const VipAccess = ({ onVipUnlock, vipLevel = 0 }: VipAccessProps) => {
       { icon: <Diamond className="w-4 h-4" />, name: 'أزهار كريستال الماس', level: 4 },
       { icon: <Shield className="w-4 h-4" />, name: 'أزهار ظلال الفراغ', level: 5 },
       { icon: <Gem className="w-4 h-4" />, name: 'أزهار عجلة الزمن', level: 6 },
-      { icon: <Crown className="w-4 h-4" />, name: 'أزهار النور الإلهي', level: 7 },
+      { icon: <Crown className="w-4 h-4" />, name: 'أزهار القوة الملكية', level: 7 },
+      { icon: <Crown className="w-4 h-4 text-purple-500" />, name: '🚀 الواجهة الاحترافية الخارقة', level: 8 },
+      { icon: <Sparkles className="w-4 h-4 text-cyan-500" />, name: '🎨 ١٦ سمة تفاعلية متطورة', level: 8 },
+      { icon: <Star className="w-4 h-4 text-gold-500" />, name: '⚡ تأثيرات بصرية ثلاثية الأبعاد', level: 8 },
+      { icon: <Zap className="w-4 h-4 text-electric-500" />, name: '🌈 انتقالات سينمائية سلسة', level: 8 },
+      { icon: <Diamond className="w-4 h-4 text-diamond-500" />, name: '🎵 مكتبة أصوات احترافية', level: 8 },
+      { icon: <Shield className="w-4 h-4 text-shield-500" />, name: '📊 تحليلات متقدمة وذكية', level: 8 },
     ];
     
     return allFeatures.filter(feature => feature.level <= level);
@@ -84,7 +91,8 @@ const VipAccess = ({ onVipUnlock, vipLevel = 0 }: VipAccessProps) => {
       crystal: 'from-gray-50/50 to-slate-50/50 dark:from-gray-950/30 dark:to-slate-950/30 border-gray-200/50 dark:border-gray-800/50',
       void: 'from-purple-50/50 to-violet-50/50 dark:from-purple-950/30 dark:to-violet-950/30 border-purple-200/50 dark:border-purple-800/50',
       time: 'from-amber-50/50 to-yellow-50/50 dark:from-amber-950/30 dark:to-yellow-950/30 border-amber-200/50 dark:border-amber-800/50',
-      divine: 'from-pink-50/50 to-rose-50/50 dark:from-pink-950/30 dark:to-rose-950/30 border-pink-200/50 dark:border-pink-800/50'
+      divine: 'from-pink-50/50 to-rose-50/50 dark:from-pink-950/30 dark:to-rose-950/30 border-pink-200/50 dark:border-pink-800/50',
+      ultra: 'from-gradient-cyber-start/50 to-gradient-cyber-end/50 dark:from-gradient-cyber-start/80 dark:to-gradient-cyber-end/80 border-cyan-400/50 dark:border-purple-400/50 shadow-ultra-glow'
     };
     return themes[theme as keyof typeof themes] || themes.forest;
   };
@@ -125,19 +133,19 @@ const VipAccess = ({ onVipUnlock, vipLevel = 0 }: VipAccessProps) => {
           {/* Level Progress */}
           <div className="space-y-2">
             <div className="flex justify-center space-x-1">
-              {Array.from({ length: 7 }).map((_, i) => (
+              {Array.from({ length: 8 }).map((_, i) => (
                 <div
                   key={i}
                   className={`w-3 h-3 rounded-full transition-all duration-500 ${
                     i < vipLevel 
-                      ? "bg-gradient-to-r from-amber-400 to-rose-400 shadow-lg animate-pulse" 
+                      ? (i === 7 ? "bg-gradient-to-r from-cyan-400 to-purple-600 shadow-ultra-glow animate-pulse border border-white/50" : "bg-gradient-to-r from-amber-400 to-rose-400 shadow-lg animate-pulse")
                       : "bg-gray-300 dark:bg-gray-700"
                   }`}
                 />
               ))}
             </div>
             <p className="text-xs text-muted-foreground">
-              المستوى {vipLevel} من 7
+              المستوى {vipLevel} من 8 {vipLevel === 8 && '🚀 ULTRA'}
             </p>
           </div>
         </div>

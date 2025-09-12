@@ -197,6 +197,7 @@ const Index = () => {
       5: 'bg-gradient-to-br from-purple-50 via-violet-50 to-indigo-50 dark:from-purple-950 dark:via-violet-950 dark:to-indigo-950', // Void
       6: 'bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 dark:from-amber-950 dark:via-yellow-950 dark:to-orange-950', // Time
       7: 'bg-gradient-to-br from-pink-50 via-rose-50 to-fuchsia-50 dark:from-pink-950 dark:via-rose-950 dark:to-fuchsia-950', // Divine
+      8: 'bg-gradient-to-br from-cyan-50 via-purple-50 to-pink-50 dark:from-cyan-950 dark:via-purple-950 dark:to-pink-950 animate-ultra-glow', // Ultra
     };
     
     return backgrounds[vipLevel as keyof typeof backgrounds] || backgrounds[1];
@@ -206,12 +207,13 @@ const Index = () => {
   const getVipWelcomeMessage = () => {
     const messages = {
       1: '🌲 مرحباً بك في عالم الغابة السحرية - استمتع بأزهار الطبيعة الخلابة',
-      2: '⭐ مرحباً بك في عالم النجوم السماوية - اكتشف أزهار الكون اللامتناهي',
+      2: '⭐ مرحباً بك في عالم النجوم السماوية - اكتشف أزهار الكون اللامتناهي',  
       3: '🔥 مرحباً بك في عالم نار العنقاء - اشعل شغفك مع أزهار النار المقدسة',
       4: '💎 مرحباً بك في عالم كريستال الماس - تألق مع أزهار الكريستال النقي',
       5: '🌙 مرحباً بك في عالم ظلال الفراغ - استكشف أزهار الظلام الغامضة',
       6: '⚡ مرحباً بك في عالم عجلة الزمن - سافر عبر الزمن مع أزهار الخلود',
-      7: '👑 مرحباً بك في عالم النور الإلهي - ارتق إلى مستوى الآلهة مع أزهار الجنة',
+      7: '👑 مرحباً بك في عالم القوة الملكية - ارتق إلى مستوى الملوك مع أزهار السلطان',
+      8: '🚀 مرحباً بك في المستوى الخارق - تجربة احترافية لا محدودة مع ١٦ ميزة متطورة',
     };
     
     return messages[vipLevel as keyof typeof messages] || messages[1];
@@ -374,7 +376,7 @@ const Index = () => {
               </TabsContent>
               
               <TabsContent value="settings">
-                <Settings onReset={handleResetData} />
+                <Settings onReset={handleResetData} vipLevel={vipLevel} />
               </TabsContent>
             </Tabs>
           </div>

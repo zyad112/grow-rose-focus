@@ -1,23 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Settings as SettingsIcon, Volume2, Palette, Bell, RotateCcw } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Settings as SettingsIcon, Volume2, Palette, Bell, RotateCcw, Sparkles, Monitor, Smartphone, Tablet, Zap, Crown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface SettingsProps {
   onReset: () => void;
+  vipLevel?: number;
+  onThemeChange?: (theme: string) => void;
 }
 
-const Settings = ({ onReset }: SettingsProps) => {
+const Settings = ({ onReset, vipLevel = 0, onThemeChange }: SettingsProps) => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [soundVolume, setSoundVolume] = useState([50]);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [theme, setTheme] = useState('nature');
   const [autoStart, setAutoStart] = useState(false);
+  const [particleEffects, setParticleEffects] = useState(true);
+  const [animations, setAnimations] = useState(true);
+  const [screenMode, setScreenMode] = useState('auto');
+  const [customColors, setCustomColors] = useState(false);
+  const [advancedFeatures, setAdvancedFeatures] = useState(false);
   const { toast } = useToast();
 
   const handleReset = () => {
@@ -144,6 +152,14 @@ const Settings = ({ onReset }: SettingsProps) => {
                     <SelectItem value="sunset">غروب الشمس 🌅</SelectItem>
                     <SelectItem value="ocean">المحيط الأزرق 🌊</SelectItem>
                     <SelectItem value="royal">الأرجواني الملكي 👑</SelectItem>
+                    {vipLevel >= 1 && <SelectItem value="forest">الغابة السحرية 🌲</SelectItem>}
+                    {vipLevel >= 2 && <SelectItem value="celestial">النجوم السماوية ⭐</SelectItem>}
+                    {vipLevel >= 3 && <SelectItem value="phoenix">نار العنقاء 🔥</SelectItem>}
+                    {vipLevel >= 4 && <SelectItem value="crystal">كريستال الماس 💎</SelectItem>}
+                    {vipLevel >= 5 && <SelectItem value="void">ظلال الفراغ 🌙</SelectItem>}
+                    {vipLevel >= 6 && <SelectItem value="time">عجلة الزمن ⚡</SelectItem>}
+                    {vipLevel >= 7 && <SelectItem value="divine">القوة الملكية 👑</SelectItem>}
+                    {vipLevel >= 8 && <SelectItem value="ultra">المستوى الخارق 🚀</SelectItem>}
                   </SelectContent>
                 </Select>
               </div>
@@ -158,6 +174,90 @@ const Settings = ({ onReset }: SettingsProps) => {
                   onCheckedChange={setAutoStart}
                 />
               </div>
+
+              {/* VIP Level 8 Ultra Features */}
+              {vipLevel >= 8 && (
+                <>
+                  <div className="mt-6 p-4 bg-gradient-to-r from-cyan-50/50 to-purple-50/50 dark:from-cyan-950/30 dark:to-purple-950/30 rounded-lg border border-cyan-200/50 dark:border-purple-800/50">
+                    <div className="flex items-center space-x-2 mb-3">
+                      <Crown className="w-4 h-4 text-purple-600" />
+                      <Badge variant="secondary" className="bg-gradient-to-r from-cyan-500 to-purple-600 text-white">
+                        المستوى الخارق
+                      </Badge>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      {/* Screen Mode Selection */}
+                      <div className="space-y-2">
+                        <Label className="text-sm font-medium flex items-center space-x-2">
+                          <Monitor className="w-4 h-4" />
+                          <span>وضع العرض المتطور</span>
+                        </Label>
+                        <Select value={screenMode} onValueChange={setScreenMode}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="auto">تلقائي ذكي 🤖</SelectItem>
+                            <SelectItem value="desktop">سطح المكتب 🖥️</SelectItem>
+                            <SelectItem value="tablet">الجهاز اللوحي 📱</SelectItem>
+                            <SelectItem value="mobile">الهاتف المحمول 📱</SelectItem>
+                            <SelectItem value="cinema">وضع السينما 🎬</SelectItem>
+                            <SelectItem value="minimal">البساطة الاحترافية ✨</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Advanced Visual Effects */}
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="particle-effects" className="text-sm font-medium flex items-center space-x-2">
+                          <Sparkles className="w-4 h-4" />
+                          <span>التأثيرات البصرية المتقدمة</span>
+                        </Label>
+                        <Switch
+                          id="particle-effects"
+                          checked={particleEffects}
+                          onCheckedChange={setParticleEffects}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="animations" className="text-sm font-medium flex items-center space-x-2">
+                          <Zap className="w-4 h-4" />
+                          <span>الانتقالات السينمائية</span>
+                        </Label>
+                        <Switch
+                          id="animations"
+                          checked={animations}
+                          onCheckedChange={setAnimations}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="custom-colors" className="text-sm font-medium">
+                          ألوان مخصصة احترافية
+                        </Label>
+                        <Switch
+                          id="custom-colors"
+                          checked={customColors}
+                          onCheckedChange={setCustomColors}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="advanced-features" className="text-sm font-medium">
+                          ميزات متقدمة (AI مساعد، تحليلات ذكية)
+                        </Label>
+                        <Switch
+                          id="advanced-features"
+                          checked={advancedFeatures}
+                          onCheckedChange={setAdvancedFeatures}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -189,6 +289,7 @@ const Settings = ({ onReset }: SettingsProps) => {
         <div className="text-center p-4 bg-gradient-sunset/10 rounded-xl border border-golden/20">
           <p className="text-xs text-muted-foreground font-arabic">
             💡 تذكر: الإعدادات محفوظة محلياً في متصفحك
+            {vipLevel >= 8 && ' | 🚀 المستوى الخارق: ميزات احترافية لا محدودة'}
           </p>
         </div>
       </div>
