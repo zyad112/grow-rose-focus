@@ -213,11 +213,40 @@ All colors MUST be HSL.
     @apply shadow-vip;
   }
 
-  /* Enhanced animations for mobile */
+  /* Enhanced animations for mobile with performance optimization */
   .mobile-optimized {
     will-change: transform;
     backface-visibility: hidden;
     perspective: 1000px;
+    transform: translateZ(0); /* Force hardware acceleration */
+  }
+
+  /* Performance optimization for animations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Improved focus management */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 9999;
+  }
+
+  .skip-link:focus {
+    top: 6px;
   }
 
   /* Arabic font improvements with ultra clarity */
