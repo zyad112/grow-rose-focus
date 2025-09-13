@@ -83,11 +83,11 @@ const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
         5: ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe'], // Void purples
         6: ['#f59e0b', '#fbbf24', '#fcd34d', '#fde68a'], // Time golds
         7: ['#ec4899', '#f472b6', '#f9a8d4', '#fce7f3'], // Divine pinks
-        8: ['#00d9ff', '#8b5cf6', '#ec4899', '#f97316'], // Ultra cyber colors
+        8: ['#00ffff', '#ff00ff', '#00ff00', '#ffff00', '#ff0080', '#8000ff', '#ff8000', '#0080ff'], // Ultra cyber rainbow
       };
       
       const colors = levelColors[vipLevel as keyof typeof levelColors] || levelColors[1];
-      const particleCount = 15 + vipLevel * 3; // More particles for higher levels
+      const particleCount = vipLevel === 8 ? 50 : 15 + vipLevel * 3; // Massive particles for Ultra level
       
       const newParticles = Array.from({ length: particleCount }, (_, i) => ({
         id: Date.now() + i,
@@ -132,11 +132,11 @@ const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
         '🌸🌈 زهرة القوة الملكية تتفتح'
       ],
       8: [ // Ultra Theme
-        '🚀 بذرة المستقبل الخارقة تنبت',
-        '⚡ براعم السايبر المتطورة تظهر',
-        '💎 أوراق الهولوجرام تتألق',
-        '🌌 برعم الذكاء الاصطناعي يتكون',
-        '🌸🚀 زهرة المستوى الخارق تتفتح'
+        '🚀 بذرة المستقبل الخارقة تنبت في العالم السايبراني',
+        '⚡ براعم الذكاء الاصطناعي المتطورة تنمو بقوة خارقة',
+        '💎 أوراق الهولوجرام الكمية تتألق بطاقة لا محدودة',
+        '🌌 برعم الواقع الافتراضي المتقدم يتشكل بروعة',
+        '🌸🚀 الزهرة الخارقة المستقبلية تتفتح - إنجاز أسطوري!'
       ]
     };
     
@@ -234,10 +234,26 @@ const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
           {isDead ? '0/5' : `${stage + 1}/5`}
         </div>
 
-        {/* VIP Crown for advanced stages */}
-        {stage >= 3 && !isDead && (
-          <div className={`absolute top-2 left-1/2 transform -translate-x-1/2 text-3xl ${vipLevel === 8 ? 'animate-cyber-pulse' : 'animate-bounce'}`}>
-            {vipLevel === 8 ? '🚀' : vipLevel >= 5 ? '👑' : vipLevel >= 3 ? '💎' : '⭐'}
+        {/* Ultra VIP Effects */}
+        {vipLevel === 8 && stage >= 2 && !isDead && (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20 animate-ultra-glow pointer-events-none"></div>
+            <div className="absolute top-2 left-1/2 transform -translate-x-1/2 text-4xl animate-hologram">
+              🚀✨
+            </div>
+            <div className="absolute bottom-2 right-2 text-2xl animate-cyber-pulse">
+              ⚡💎
+            </div>
+            <div className="absolute bottom-2 left-2 text-2xl animate-bounce">
+              🌌🔮
+            </div>
+          </>
+        )}
+
+        {/* VIP Crown for other levels */}
+        {stage >= 3 && !isDead && vipLevel !== 8 && (
+          <div className={`absolute top-2 left-1/2 transform -translate-x-1/2 text-3xl animate-bounce`}>
+            {vipLevel >= 5 ? '👑' : vipLevel >= 3 ? '💎' : '⭐'}
           </div>
         )}
       </div>
@@ -265,10 +281,14 @@ const VipRose = ({ stage, isDead, isGrowing, vipLevel = 1 }: VipRoseProps) => {
         )}
       </div>
 
-      {/* VIP Achievement Badge */}
+      {/* Ultra Achievement Badge */}
       {stage === 4 && !isDead && (
-        <div className={`absolute -bottom-6 left-1/2 transform -translate-x-1/2 ${vipLevel === 8 ? 'bg-gradient-to-r from-cyan-500 to-purple-600 animate-cyber-pulse' : 'bg-gradient-to-r from-purple-600 to-pink-600 animate-pulse'} text-white px-4 py-2 rounded-full text-sm font-bold shadow-xl`}>
-          {getLevelIcon()} إنجاز VIP مستوى {vipLevel} {vipLevel === 8 && '🚀 ULTRA'}
+        <div className={`absolute -bottom-8 left-1/2 transform -translate-x-1/2 z-30 ${vipLevel === 8 ? 'bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 animate-cyber-pulse border-2 border-cyan-300/50 ultra-text' : 'bg-gradient-to-r from-purple-600 to-pink-600 animate-pulse'} text-white px-6 py-3 rounded-2xl text-sm font-bold shadow-2xl`}>
+          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+            <span className="text-lg">{getLevelIcon()}</span>
+            <span className="font-arabic">{vipLevel === 8 ? 'إنجاز فائق - مستوى الخارق الاحترافي' : `إنجاز VIP مستوى ${vipLevel}`}</span>
+            {vipLevel === 8 && <span className="text-lg animate-hologram">🚀⚡</span>}
+          </div>
         </div>
       )}
     </div>
